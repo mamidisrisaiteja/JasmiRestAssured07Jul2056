@@ -6,13 +6,15 @@ import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import resources.libFunctions;
 
 	
 
 public class StepDefinition {
 
 	RequestSpecification reqs;
-	Response resp;
+	Response resp,resp1;
+	String fileLocation="C:\\\\Users\\\\AN574BV\\\\git\\\\JasmiRestAssured07Jul2056\\\\MvnTest1\\\\src\\\\main\\\\java\\\\resources\\\\placeLocation.json";
 	@Given("Add Place Payload")
 	public void add_place_payload() {
 	    // Write code here that turns the phrase above into concrete actions
@@ -20,37 +22,50 @@ public class StepDefinition {
 		  reqs=RestAssured.given();
 	}
 	@When("user calls {string} with Post HTTP request")
-	public void user_calls_with_post_http_request(String string) {
+	public Response user_calls_with_post_http_request(String string) throws Exception {
 		resp=             reqs.queryParam("key", "qaclick123")
                 .header("Content-Type","application/json")
-                .body("{\r\n"
-	+ "  \"location\": {\r\n"
-	+ "    \"lat\": -38.383494,\r\n"
-	+ "    \"lng\": 33.427362\r\n"
-	+ "  },\r\n"
-	+ "  \"accuracy\": 50,\r\n"
-	+ "  \"name\": \"Frontline house\",\r\n"
-	+ "  \"phone_number\": \"(+91) 983 893 3937\",\r\n"
-	+ "  \"address\": \"29, side layout, cohen 09\",\r\n"
-	+ "  \"types\": [\r\n"
-	+ "    \"shoe park\",\r\n"
-	+ "    \"shop\"\r\n"
-	+ "  ],\r\n"
-	+ "  \"website\": \"http://google.com\",\r\n"
-	+ "  \"language\": \"French-IN\"\r\n"
-	+ "}\r\n"
-	+ "")
+                .body(libFunctions.jSONReader(fileLocation))
                 .post("maps/api/place/add/json");
+		
+		return resp;
 	}
-	@Then("the API call gets success with status code {int}")
-	public void the_api_call_gets_success_with_status_code(Integer int1) {
+	@Then("the post API call gets success with status code {int}")
+	public Response the_api_call_gets_success_with_status_code(Integer int1) {
 	    // Write code here that turns the phrase above into concrete actions
 		int x=int1;
 		 resp.then().assertThat().statusCode(x);
 		 resp.prettyPrint();
+		
+		 String s=resp.jsonPath().getString("place_id");
+		 System.out.println("the paleId is " + s);
+		 return resp;
+		 
+		
+		
 	}
 	
+@When("user calls {string} with Get HTTP request")
+	public void user_calls_with_get_http_request(String string) throws Exception {
+	
+	String s=string;
+	resp1=reqs.queryParam("place_id",user_calls_with_post_http_request(s).jsonPath().getString("place_id"))
+            .queryParam("key", "qaclick123").headers("Content-Type","application/json")
+            .get("/maps/api/place/get/json");
+	}
 
-
-
+@Then("the get API call gets success with status code {int}")
+public void the_api_call_gets_success_with_status_code1(Integer int1) {
+    // Write code here that turns the phrase above into concrete actions
+	int x=int1;
+	 resp1.then().assertThat().statusCode(x);
+	 resp1.prettyPrint();
+	
+	
+	
 }
+	
+}
+
+
+

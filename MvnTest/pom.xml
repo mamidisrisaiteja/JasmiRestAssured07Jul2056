@@ -14,11 +14,23 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+   <serenity.version>2.1.13</serenity.version>
+        <serenity.maven.version>2.1.13</serenity.maven.version>
+        <serenity.cucumber.version>2.1.2</serenity.cucumber.version>
+        <cucumber.version>4.8.0</cucumber.version>
+         <encoding>UTF-8</encoding>
   </properties>
 
   <dependencies>
+  
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${cucumber.version}</version>
+        </dependency>
+              
+        
+        
   
    <dependency>
     <groupId>io.cucumber</groupId>
@@ -38,6 +50,14 @@
     <version>7.4.1</version>
 
 </dependency>
+
+<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+<dependency>
+    <groupId>com.googlecode.json-simple</groupId>
+    <artifactId>json-simple</artifactId>
+    <version>1.1.1</version>
+</dependency>
+
     
   
 		<dependency>
